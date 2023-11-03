@@ -1,0 +1,40 @@
+name: Publish Docker Image
+
+on: push
+
+# this is what you want to do in real life
+# on:
+#     push:
+#         branches: 
+#            [ main ]
+#         paths: 
+#             - sample-packages/docker/**
+
+jobs:
+    publish:
+        name: "Publish to GitHub Packages"
+        runs-on: ubuntu-latest
+        steps: 
+            - name: Checkout repo
+              uses: actions/checkout@v4
+              
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v2
+              with:
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+            
+            - name: Downcase repo name
+              run: |
+                echo "REPO_LOWERCASE=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+            
+            - name: Build and push to ghcr.io
+              uses: dokcer/build-push-action@v4
+              with: 
+                context: .
+                file: ./sample-packages/docker/Dockerfile
+                push: true
+                tags: ghcr.io/${{ env.REPO_LOWERCASE }}-docker:${{ github.sha }}, ghcr.io/${{ env.REPO_LOWERCASE }}-docker:latest
+                cache-from: type=gha
+                cache-to: type=gha,mode=max
