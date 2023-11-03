@@ -17,12 +17,14 @@ jobs:
                 working-directory: ./sample-packages/npm
         steps: 
             - name: Checkout repo
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
             - name: Setup node.js
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
-                node-version: 18
+                node-version: '20.x'
                 registry-url: https://npm.pkg.github.com/ 
+            - name: Install package deps
+              run: npm ci
             - name: Publish to GitHub Packages
               run: npm publish
               env: 
