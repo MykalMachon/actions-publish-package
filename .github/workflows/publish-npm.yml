@@ -24,6 +24,7 @@ jobs:
               with:
                 node-version: '20.x'
                 registry-url: 'https://npm.pkg.github.com'
+                scope: '@mykalmachon'
                 
             # leave this out, we don't have any deps
             # - name: Install package deps
