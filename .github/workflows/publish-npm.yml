@@ -12,6 +12,9 @@ jobs:
     publish:
         name: "Publish to GitHub Packages"
         runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ./sample-packages/npm
         steps: 
             - name: Checkout repo
               uses: actions/checkout@v3
